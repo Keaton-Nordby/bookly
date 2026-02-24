@@ -1,9 +1,3 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-
-app = FastAPI()
-
-
 books = [
     {
         "id": 1,
@@ -60,29 +54,3 @@ books = [
         "language": "English"
     }
 ]
-
-
-@app.get('/books' response_model=)
-async def get_all_books():
-    return books
-
-
-@app.post('/books')
-async def create_a_book() -> dict:
-    pass
-
-
-@app.get('/books/{book_id}')
-async def get_book(book_id: int) -> dict:
-    pass
-
-
-@app.put('/book/{book_id}')
-async def get_all_books(book_id: int) -> dict:
-    pass
-
-
-@app.delete('/books/{book_id}')
-async def delete_a_book(book_id: int) -> dict:
-    pass
-
