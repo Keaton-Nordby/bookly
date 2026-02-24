@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -61,7 +62,7 @@ books = [
 ]
 
 
-@app.get('/books')
+@app.get('/books' response_model=)
 async def get_all_books():
     return books
 
