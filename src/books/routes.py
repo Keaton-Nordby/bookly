@@ -42,7 +42,7 @@ async def get_book(
 async def update_book(
     book_uid: uuid.UUID,
     book_update_data: BookUpdateModel,
-    session: AsyncSession = Depends(get_session),
+    session: AsyncSession = Depends(get_session)
 ):
 
     updated_book = await book_service.update_book(book_uid, book_update_data, session)
