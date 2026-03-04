@@ -47,7 +47,7 @@ async def update_book(
 
     updated_book = await book_service.update_book(book_uid, book_update_data, session)
 
-    if not updated_book:
+    if updated_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
 
     return updated_book
