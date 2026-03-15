@@ -13,6 +13,8 @@ async_engine = AsyncEngine(create_engine(url=Config.DATABASE_URL, echo=True))
 # function to keep db running while app is being used
 async def init_db():
     async with async_engine.begin() as conn:
+        from src.books.models import Book
+        
         await conn.run_sync(SQLModel.metadata.create_all)
 
 
