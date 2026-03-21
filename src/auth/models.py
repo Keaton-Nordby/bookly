@@ -5,7 +5,7 @@ import uuid
 
 
 class User(SQLModel, table=True):
-    __tablenaem__ = 'users'
+    __tablename__ = 'users'
     uid: uuid.UUID = Field(
         sa_column=Column(pg.UUID, nullable=False, primary_key=True, default=uuid.uuid4)
     )
