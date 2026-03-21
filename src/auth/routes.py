@@ -7,9 +7,12 @@ from fastapi.exceptions import HTTPException
 from .utils import create_access_token, decode_token, verify_password
 from fastapi.responses import JSONResponse
 from datetime import timedelta
+from src.auth.dependencies import RefreshTokenBearer
+
 
 auth_router = APIRouter()
 user_service = UserService()
+
 
 REFRESH_TOKEN_EXPIRY = 2
 
@@ -36,46 +39,45 @@ async def create_user_Account(
 
 
 @auth_router.post("/login")
-async def login_users(login_data: UserLoginModel, session: AsyncSession = Depends(get_session)):
+async def login_users(
+    login_data: UserLoginModel, session: AsyncSession = Depends(get_session)
+):
     email = login_data.email
     password = login_data.password
-    
+
     user = await user_service.get_user_by_email(email, session)
-    
+
     if user is not None:
         password_valid = verify_password(password, user.password_hash)
-        
+
         if password_valid:
             access_token = create_access_token(
-                user_data={
-                    'email': user.email,
-                    'user_uid': str(user.uid)
-                }
+                user_data={"email": user.email, "user_uid": str(user.uid)}
             )
-            
+
             refresh_token = create_access_token(
-                user_data={
-                    'email': user.email,
-                    'user_uid': str(user.uid)
-                },
+                user_data={"email": user.email, "user_uid": str(user.uid)},
                 refresh=True,
-                expiry=timedelta(days=REFRESH_TOKEN_EXPIRY)
+                expiry=timedelta(days=REFRESH_TOKEN_EXPIRY),
             )
-            
+
             return JSONResponse(
                 content={
                     "message": "Login successful",
                     "access_token": access_token,
                     "refresh_token": refresh_token,
-                    "user": {
-                        "email": user.email,
-                        "uid": str(user.uid)
-                    }
+                    "user": {"email": user.email, "uid": str(user.uid)},
                 }
             )
-            
+
     raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="Invalid Email or Password"
+        status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Email or Password"
     )
-        
+    
+    
+    
+@auth_router.get('/refresh_token')
+async def get_new_access_token(token_details:dict = Depends(RefreshTokenBearer())):
+    
+    
+    return {}
