@@ -78,6 +78,8 @@ async def login_users(
     
 @auth_router.get('/refresh_token')
 async def get_new_access_token(token_details:dict = Depends(RefreshTokenBearer())):
+    expiry_timestamp = token_details('exp')
     
+    print(expiry_timestamp)
     
     return {}
